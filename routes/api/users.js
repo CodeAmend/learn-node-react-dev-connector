@@ -16,13 +16,13 @@ const router = express.Router();
 router.post('/',
   [
     check('name', 'Name is required')
-    .not()
-    .isEmpty(),
+      .not()
+      .isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check(
       'password',
       'Please enter a password with 6 or more characters')
-    .isLength({ min: 6 })
+      .isLength({ min: 6 })
   ],
   // CALLBACK for route
   async (req, res) => {
@@ -42,7 +42,6 @@ router.post('/',
 
       // IF User exists, 400 and error message
       if(user) {
-        console.log("SECRET_PARAM: ", req.secretParam);
         return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
