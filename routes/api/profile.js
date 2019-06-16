@@ -32,7 +32,6 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-
 // @route   POST api/profile 
 // @desc    Create or Update user profile
 // @accress Private
@@ -42,7 +41,6 @@ router.post('/',
     check('status', 'status is required').not().isEmpty(),
     check('skills', 'skills is required').not().isEmpty(),
   ],
-
   async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -52,44 +50,67 @@ router.post('/',
 
     try {
 
-      const {
-        company,
-        website,
-        location,
-        bio,
-        status,
-        githubusername,
-        skills,
-        youtube,
-        facebook,
-        twitter,
-        instagram,
-        linkedin
-      } = req.body;
+      // Util function
+      let setField;
+      const setFieldObj = fieldObj => name => {
+        if(req.body[name]) fieldObj[name] = req.body[name];
+      }
+
+      const profileFields = { 
+        user: req.user.id,
+        social: {} 
+      };
+
+      setField = setFieldObj(profileFields);
+      setField('company');
+      setField('website');
+      setField('location');
+      setField('bio');
+      setField('status');
+      setField('education');
+      setField('experience');
+
+      setField = setFieldObj(profileFields.social);
+      setField('githubusername');
+      setField('youtube');
+      setField('facebook');
+      setField('twitter');
+      setField('instagram');
+      setField('linkedin');
+
+      if(req.body.skills) {
+        profileFields.skills = req.body.skills.split(',');
+      }
+
+      try {
+        let profile = await Profile.findOne({ user: req.user.id });
+
+        if(profile) {
+          profile = await Profile.findOneAndUpdate(
+            { user: req.user.id },
+            { $set: profileFields },
+            { new: true }
+          );
+
+          return res.json(profile);
+        }
 
 
-      const profileFields = {};
-      profileFields.user = req.user.id;
-      if(company) profileFields.company = company;
-      if(website) profileFields.website = website;
-      if(location) profileFields.location = location;
-      if(bio) profileFields.bio = bio;
-      if(status) profileFields.status = status;
-      if(githubusername) profileFields.githubusername = githubusername;
-      if(youtube) profileFields.youtube = youtube;
-      if(facebook) profileFields.facebook = facebook;
-      if(twitter) profileFields.twitter = twitter;
-      if(instagram) profileFields.instagram = instagram;
-      if(linkedin) profileFields.linkedin = linkedin;
-      if(skills) {
-        const skillsArray = skills.split(',');
-        profileFields.skills = skillsArray;
+        profile = new Profile(profileFields);
+        await profile.save();
+
+        res.json(profile);
+
+      } catch (err) {
+        console.log(err);
+        res.status(500).send('Server Error');
       }
 
       res.json(profileFields)
 
     } catch(err) {
-      res.status(500).json({ msg: 'Server Error'});
+      console.log(err.message);
+      res.status(500).json({ msg: 'Server Error', errors: err });
     }
   }
 );
