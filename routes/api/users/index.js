@@ -79,7 +79,7 @@ router.post('/',
           if(err) throw err;
 
           // Token to json
-          res.json({ token });
+          res.json({ user: user, token });
         }
       );
 
