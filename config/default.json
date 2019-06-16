@@ -1,4 +1,0 @@
-{
-  "mongoURL": "mongodb+srv://codeamend:codeamend@devconnector-kyh0h.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "secret"
-}
