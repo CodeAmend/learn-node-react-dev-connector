@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator/check');
+
 const updateProfile = async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
@@ -56,14 +58,14 @@ const updateProfile = async (req, res) => {
       profile = new Profile(profileFields);
       await profile.save();
 
-      res.json(profile);
+      return res.json(profile);
 
     } catch (err) {
       console.log(err);
       res.status(500).send('Server Error');
     }
 
-    res.json(profileFields)
+    return res.json(profileFields)
 
   } catch(err) {
     console.log(err.message);
