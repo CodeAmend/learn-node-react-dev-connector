@@ -8,6 +8,7 @@ const getProfiles    = require('./getProfiles');
 const updateProfile  = require('./updateProfile');
 const getProfileById = require('./getProfileById');
 const postExperience = require('./postExperience');
+const postEducation  = require('./postEducation');
 const deleteUserProfilePosts = require('./deleteUserProfilePosts');
 
 const router = express.Router();
@@ -49,5 +50,14 @@ router.post('/experience', auth, [
   check('company', 'Please add company name'),
   check('from', 'Please add from date'),
 ], postExperience);
+
+// @route   POST api/profile/experience
+// @desc    Post experience obj to profile experience list
+// @access  Private
+router.post('/education', auth, [
+  check('name', 'Please add name'),
+  check('school', 'Please add company name'),
+  check('from', 'Please add from date'),
+], postEducation);
 
 module.exports = router;

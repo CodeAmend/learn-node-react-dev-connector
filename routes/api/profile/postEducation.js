@@ -1,21 +1,21 @@
-const postExperience = async (req, res) => {
+const postEducation = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
     const {
-      title,
-      company,
-      location,
+      school,
+      degree,
+      fieldOfStudy,
       from,
       to,
       current,
       description
     } = req.body;
 
-    const newExp = {
-      title,
-      company,
-      location,
+    const newEdu = {
+      school,
+      degree,
+      fieldOfStudy,
       from,
       to,
       current,
@@ -23,7 +23,7 @@ const postExperience = async (req, res) => {
     };
 
     // Add experience 
-    profile.experience.unshift(newExp);
+    profile.education.unshift(newEdu);
     await profile.save()
 
     res.json(profile);
@@ -34,4 +34,5 @@ const postExperience = async (req, res) => {
   }
 }
 
-module.exports = postExperience;
+module.exports = postEducation;
+

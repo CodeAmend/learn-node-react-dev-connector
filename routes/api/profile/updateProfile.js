@@ -13,11 +13,12 @@ const updateProfile = async (req, res) => {
     let setField;
     const setFieldObj = fieldObj => name => {
       if(req.body[name]) fieldObj[name] = req.body[name];
+      return req.body[name];
     }
 
     const profileFields = { 
       user: req.user.id,
-      social: {} 
+      social: {},
     };
 
     setField = setFieldObj(profileFields);
@@ -26,8 +27,8 @@ const updateProfile = async (req, res) => {
     setField('location');
     setField('bio');
     setField('status');
-    setField('education');
-    setField('experience');
+    // setField('education');
+    // setField('experience');
 
     setField = setFieldObj(profileFields.social);
     setField('githubusername');
