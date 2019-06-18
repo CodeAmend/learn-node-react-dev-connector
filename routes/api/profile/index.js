@@ -7,6 +7,7 @@ const getMyProfile   = require('./getMyProfile');
 const getProfiles    = require('./getProfiles');
 const updateProfile  = require('./updateProfile');
 const getProfileById = require('./getProfileById');
+const postExperience = require('./postExperience');
 const deleteUserProfilePosts = require('./deleteUserProfilePosts');
 
 const router = express.Router();
@@ -36,8 +37,17 @@ router.get('/', getProfiles);
 router.get('/user/:userId', getProfileById);
 
 // @route   DELETE api/profile
-// @desc    DELETE profile, user & posts
+// @desc    Delete profile, user & posts
 // @access  Private
 router.delete('/', auth, deleteUserProfilePosts);
+
+// @route   POST api/profile/experience
+// @desc    Post experience obj to profile experience list
+// @access  Private
+router.post('/experience', auth, [
+  check('name', 'Please add name'),
+  check('company', 'Please add company name'),
+  check('from', 'Please add from date'),
+], postExperience);
 
 module.exports = router;
