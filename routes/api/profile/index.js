@@ -7,6 +7,7 @@ const getMyProfile   = require('./getMyProfile');
 const getProfiles    = require('./getProfiles');
 const updateProfile  = require('./updateProfile');
 const getProfileById = require('./getProfileById');
+const deleteUserProfilePosts = require('./deleteUserProfilePosts');
 
 const router = express.Router();
 
@@ -33,5 +34,10 @@ router.get('/', getProfiles);
 // @desc    Get profile by id
 // @access  Public
 router.get('/user/:userId', getProfileById);
+
+// @route   DELETE api/profile
+// @desc    DELETE profile, user & posts
+// @access  Private
+router.delete('/', auth, deleteUserProfilePosts);
 
 module.exports = router;
